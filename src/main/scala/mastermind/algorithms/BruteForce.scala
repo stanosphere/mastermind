@@ -6,7 +6,7 @@ import mastermind.model.{Code, CodeBreakResult, Feedback}
 import cats.data.State
 import cats.implicits._
 
-class BruteForce(answer: Answer) {
+case class BruteForce(answer: Answer) extends Algorithm {
 
   case class GameState(possibilities: Set[Code], currentGuess: Code, guessesMade: Int)
 

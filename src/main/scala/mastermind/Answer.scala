@@ -21,6 +21,7 @@ trait Answer {
       )
     )
   }
+
 }
 
 object Answer {
@@ -35,7 +36,7 @@ object Answer {
   def getNumberOfElementsInSamePosition[A](xs: List[A], ys: List[A]): Int =
     (xs zip ys) count { case (x, y) => x == y }
 
-  def getHits[A](xs: Bag[A], ys: Bag[A]): Int =
+  def getHits[A](xs: Bag[A], ys: Bag[A]): Int                             =
     (xs.keySet intersect ys.keySet).toList.map(a => math.min(xs(a), ys(a))).sum
 
   def listToBag[A](as: List[A]): Bag[A] =

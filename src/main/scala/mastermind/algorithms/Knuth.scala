@@ -6,13 +6,18 @@ import mastermind.model.{Code, CodeBreakResult, Feedback}
 import cats.data.State
 import cats.implicits._
 
-class Knuth(answer: Answer) {
+case class Knuth(answer: Answer) extends Algorithm {
 
-  case class GameState(possibilities: Set[Code], currentGuess: Code, guessesMade: Int)
+  case class GameState(
+      possibilities: Set[Code],
+      currentGuess: Code,
+      guessesMade: Int,
+      usedGuesses: Set[Code]
+  )
 
   def breakCode(): CodeBreakResult = {
     val firstGuess   = Code(White, White, Black, Black)
-    val initialState = GameState(Code.allPossibleCodes, firstGuess, 0)
+    val initialState = GameState(Code.allPossibleCodes, firstGuess, 0, Set.empty[Code])
 
     val calc = for {
       _   <- State.set(initialState)
@@ -34,14 +39,39 @@ class Knuth(answer: Answer) {
 
   // TODO maybe use lensing for the state transition functions?
   def eliminatePossibilities(guess: Code, feedback: Feedback, gs: GameState): GameState =
-    gs.copy(possibilities = gs.possibilities.filter(possibility => {
+    gs.copy(possibilities = eliminatePossibilities(guess, feedback, gs.possibilities))
+
+  def eliminatePossibilities(guess: Code, feedback: Feedback, possibilities: Set[Code]): Set[Code] =
+    possibilities.filter(possibility => {
       val feedbackForThisPossibility = Answer(possibility).giveFeedBack(guess)
       feedback == feedbackForThisPossibility
-    }))
+    })
 
   // TODO: implement Knuth's technique here otherwise this is identical to the brute force method lol
-  def getNextGuess(gs: GameState): GameState =
-    gs.copy(currentGuess = gs.possibilities.head)
+  def getNextGuess(gs: GameState): GameState = {
+    val unused              = (Code.allPossibleCodes -- gs.usedGuesses).toList
+    val scores              = unused.map(guess => guess -> getScoreForGuess(guess, gs.possibilities))
+    val maxScore            = scores.map { case (_, score) => score }.max
+    val guessesWithMaxScore = scores.filter { case (_, score) => score == maxScore }.map(_._1)
+
+    val nextGuess = chooseGuessFromGuessesInMaxScore(guessesWithMaxScore, gs.possibilities)
+
+    gs.copy(currentGuess = nextGuess)
+  }
+
+  // ideally we would like to use something that is in the set of remaining possibilities
+  // however this is not always possible hence this function!
+  def chooseGuessFromGuessesInMaxScore(guessesWithMaxScore: List[Code], possibilities: Set[Code]): Code =
+    guessesWithMaxScore.find(possibilities.contains).getOrElse(guessesWithMaxScore.head)
+
+  // the score for each guess is the minimum number of possibilities that will be eliminated
+  def getScoreForGuess(guess: Code, possibilities: Set[Code]): Int =
+    Feedback.allPossibleFeedbacks.toList
+      .map(getNumberThatWouldBeEliminated(guess, _, possibilities))
+      .min
+
+  def getNumberThatWouldBeEliminated(guess: Code, feedback: Feedback, possibilities: Set[Code]): Int =
+    possibilities.size - eliminatePossibilities(guess, feedback, possibilities).size
 
   def incrementGuessCounter(gs: GameState): GameState =
     gs.copy(guessesMade = gs.guessesMade + 1)
