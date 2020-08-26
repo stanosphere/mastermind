@@ -2,7 +2,7 @@ package mastermind.algorithms
 
 import mastermind.Answer
 import mastermind.model.Peg._
-import mastermind.model.{Code, Feedback}
+import mastermind.model.{Code, CodeBreakResult, Feedback}
 import cats.data.State
 import cats.implicits._
 
@@ -10,7 +10,7 @@ class Knuth(answer: Answer) {
 
   case class GameState(possibilities: Set[Code], currentGuess: Code, guessesMade: Int)
 
-  def breakCode(): (Code, Int) = {
+  def breakCode(): CodeBreakResult = {
     val firstGuess   = Code(White, White, Black, Black)
     val initialState = GameState(Code.allPossibleCodes, firstGuess, 0)
 
@@ -18,7 +18,7 @@ class Knuth(answer: Answer) {
       _   <- State.set(initialState)
       _   <- doSingleTurn.iterateUntil(_ == Feedback.feedBackForCorrectAnswer)
       ans <- State.get
-    } yield (ans.currentGuess, ans.guessesMade)
+    } yield CodeBreakResult(ans.currentGuess, ans.guessesMade)
 
     calc.run(initialState).value._2
   }

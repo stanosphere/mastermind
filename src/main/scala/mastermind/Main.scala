@@ -1,17 +1,17 @@
 package mastermind
 
-import mastermind.algorithms.{BruteForce, Knuth}
+import mastermind.algorithms.BruteForce
 import mastermind.model.Code
-import mastermind.model.Peg._
 
 object Main extends App {
 
-  val answer = Answer(Code(White, Green, Green, Green))
+  val numberOfCodesByGuessesUsed =
+    Code.allPossibleCodes.toList
+      .map(Answer(_))
+      .map(new BruteForce(_))
+      .map(_.breakCode())
+      .groupMapReduce(_.numberOfGuessesUsed)(_ => 1)(_ + _)
 
-  val knuth      = new Knuth(answer)
-  val bruteForce = new BruteForce(answer)
+  println(numberOfCodesByGuessesUsed)
 
-  val res = bruteForce.breakCode()
-
-  println(res)
 }

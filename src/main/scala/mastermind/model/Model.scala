@@ -25,3 +25,5 @@ object Feedback {
   val feedBackForCorrectAnswer: Feedback =
     Feedback(Map(FeedbackPeg.Black -> 4, FeedbackPeg.White -> 0))
 }
+
+case class CodeBreakResult(code: Code, numberOfGuessesUsed: Int)
