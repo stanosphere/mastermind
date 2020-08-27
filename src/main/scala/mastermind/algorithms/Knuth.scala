@@ -47,7 +47,6 @@ case object Knuth extends Algorithm {
       feedback == feedbackForThisPossibility
     })
 
-  // TODO: implement Knuth's technique here otherwise this is identical to the brute force method lol
   def getNextGuess(gs: GameState): GameState = {
     val unused              = (Code.allPossibleCodes -- gs.usedGuesses).toList
     val scores              = unused.map(guess => guess -> getScoreForGuess(guess, gs.possibilities))
