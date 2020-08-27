@@ -1,9 +1,9 @@
 package mastermind
 
 import mastermind.model.{Code, Feedback, FeedbackPeg}
-import Answer._
+import HiddenCode._
 
-trait Answer {
+trait HiddenCode {
   // protected so that the algorithms can't just read off the answer lol
   protected val answer: Code
 
@@ -24,9 +24,9 @@ trait Answer {
 
 }
 
-object Answer {
-  def apply(guess: Code): Answer =
-    new Answer {
+object HiddenCode {
+  def apply(guess: Code): HiddenCode =
+    new HiddenCode {
       override protected val answer: Code = guess
     }
 

@@ -1,9 +1,12 @@
 package mastermind.algorithms
 
-import mastermind.Answer
+import mastermind.HiddenCode
 import mastermind.model.CodeBreakResult
 
-trait Algorithm {
-  val answer: Answer
-  def breakCode(): CodeBreakResult
+trait Algorithm extends Product {
+  def breakCode(a: HiddenCode): CodeBreakResult
 }
+
+//object Algorithm {
+//  def a
+//}

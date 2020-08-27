@@ -1,32 +1,32 @@
 package mastermind.algorithms
 
-import mastermind.Answer
+import mastermind.HiddenCode
 import mastermind.model.Peg._
 import mastermind.model.{Code, CodeBreakResult, Feedback}
 import cats.data.State
 import cats.implicits._
 
-case class BruteForce(answer: Answer) extends Algorithm {
+case object BruteForce extends Algorithm {
 
   case class GameState(possibilities: Set[Code], currentGuess: Code, guessesMade: Int)
 
-  def breakCode(): CodeBreakResult = {
+  def breakCode(hiddenCode: HiddenCode): CodeBreakResult = {
     val firstGuess   = Code(White, White, Black, Black)
     val initialState = GameState(Code.allPossibleCodes, firstGuess, 0)
 
     val calc = for {
       _   <- State.set(initialState)
-      _   <- doSingleTurn.iterateUntil(_ == Feedback.feedBackForCorrectAnswer)
+      _   <- doSingleTurn(hiddenCode).iterateUntil(_ == Feedback.feedBackForCorrectAnswer)
       ans <- State.get
     } yield CodeBreakResult(ans.currentGuess, ans.guessesMade)
 
     calc.run(initialState).value._2
   }
 
-  def doSingleTurn: State[GameState, Feedback] =
+  def doSingleTurn(hiddenCode: HiddenCode): State[GameState, Feedback] =
     for {
       gs      <- State.get[GameState]
-      feedback = answer.giveFeedBack(gs.currentGuess)
+      feedback = hiddenCode.giveFeedBack(gs.currentGuess)
       _       <- State.modify[GameState](incrementGuessCounter)
       _       <- State.modify[GameState](eliminatePossibilities(gs.currentGuess, feedback, _))
       _       <- State.modify[GameState](getNextGuess)
@@ -35,7 +35,7 @@ case class BruteForce(answer: Answer) extends Algorithm {
   // TODO maybe use lensing for the state transition functions?
   def eliminatePossibilities(guess: Code, feedback: Feedback, gs: GameState): GameState =
     gs.copy(possibilities = gs.possibilities.filter(possibility => {
-      val feedbackForThisPossibility = Answer(possibility).giveFeedBack(guess)
+      val feedbackForThisPossibility = HiddenCode(possibility).giveFeedBack(guess)
       feedback == feedbackForThisPossibility
     }))
 
