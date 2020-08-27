@@ -12,5 +12,5 @@ scalacOptions ++= Seq(
   "-Xfatal-warnings"
 )
 
-libraryDependencies += "org.typelevel" %% "cats-core" % "2.1.1"
-
+libraryDependencies += "org.typelevel"        %% "cats-core"    % "2.1.1"
+libraryDependencies += "com.github.pathikrit" %% "better-files" % "3.9.1"
