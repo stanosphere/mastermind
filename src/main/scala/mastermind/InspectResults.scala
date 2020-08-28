@@ -1,7 +1,7 @@
 package mastermind
 
 import better.files._
-import mastermind.model.{Code, CodeBreakResult}
+import mastermind.model.{Code, CodeBreakResult, Feedback, FeedbackPeg}
 import cats.syntax.traverse._
 import cats.instances.list._
 import cats.instances.either._
@@ -11,6 +11,22 @@ import cats.syntax.show._
 
 object InspectResults {
   val resultDir = "out/mastermind/"
+
+  println(Feedback.allPossibleFeedbacks)
+
+  val q = Set(1,2,3)
+
+  val p = (for {
+  a <- q
+  b <- q
+  c <- q
+  d <- q
+  e <- q
+  f <- q
+  g <- q
+  } yield List(a,b,c,d,e,f,g))
+
+  println(p.map(_.sorted).size)
 
   def main(args: Array[String]): Unit = {
     // yes I am being naughty with my gets
