@@ -117,3 +117,25 @@ Worst Case    -> 5
 Median        -> 5
 Mode          -> 5
 ```
+
+## Run
+
+I mean I just use intellij for everything and click the little green run arrow in the gutter because I'm a n00b
+
+But if you're a terminal person:
+Assuming you have scala and sbt do this:
+
+```
+sbt compile
+```
+
+To look at the algorithm result summaries (As derived from the CSVs in `/out/mastermind`) you can do:
+```
+sbt "runMain mastermind.InspectResults"
+```
+
+To run one of the algorithms on all possible input codes and produce an output CSV you can do;
+```
+sbt "runMain mastermind.RunAlgorithm ALGORITHM_NAME"
+```
+where (at the moment) ALGORITHM_NAME is either `knuth` or `brute-force`
