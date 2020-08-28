@@ -14,8 +14,10 @@ object StatsSummary {
       worstCase = mastermindResultSummary.keySet.max
     )
 
-  def getWeightedMean(map: Map[Int, Int]): Double =
+  def getWeightedMean(map: Map[Int, Int]): Double = {
+    println( map.iterator.map { case (a, b) => a * b }.sum,map.values.sum.toDouble)
     map.iterator.map { case (a, b) => a * b }.sum / map.values.sum.toDouble
+  }
 
   def getMode[A](map: Map[A, Int]): A             =
     map.maxBy { case (_, occurrences) => occurrences }._1

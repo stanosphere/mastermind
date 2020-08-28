@@ -34,9 +34,12 @@ So how many feedbacks are possible in total?
 - In general for a game with `n` holes the answer will be (n + 2)! / (n! * 2!) 
 - = (n + 1) * (n + 2) / 2
 
-The way both these algorithms work is to start with an eligible set of possibilities for what the hidden code could be and then at each step try to whittle this eligible set down until we guess the correct hidden code. In the next two sections I'll describe how each algorithm works.
+The way both these algorithms work is to start with an eligible set of possibilities for what the hidden code could be and then at each step try to whittle this eligible set down until we guess the correct hidden code. 
+Knuth's is better than my brute force one but takes much longer to run.
+In the next two sections I'll describe how each algorithm works.
 
 ### Brute Force
+With my implementation on my little macbook this algorithm took seconds to run for all 1296 hidden codes. 
 
 1. Start be guessing `Code(White, White, Black, Black)`
 2. Submit your guess
@@ -49,3 +52,68 @@ The way both these algorithms work is to start with an eligible set of possibili
 6. Now that the eligible set has been reduced choose a code from it as your next guess
     - Any code will do but I just went with the first one
     - Repeat steps 2 -> 6 until you win or get bored
+    
+#### Results
+```
+Results for brute-force algorithm:
+Number of guesses needed on the left, 
+amount of hidden codes that needed that number of guesses on the left
+
+Map(
+  1 -> 1,
+  2 -> 12,
+  3 -> 96,
+  4 -> 408,
+  5 -> 608,
+  6 -> 160,
+  7 -> 11
+)
+
+Weighted Mean -> 6022 / 1296 = 4.64660...
+Worst Case    -> 7
+Median        -> 5
+Mode          -> 5
+```
+
+### Knuth's Algorithm
+The key difference between this and my brute force one is that Knuth is much more intelligent about choosing the next guess.
+He uses a minimax technique to do this.
+The next guess is determined by looking at all unused codes and calculating the minimum number of possibilities that could be eliminated from the eligible set. 
+And then choosing the guess that maximises this.
+This can give situations where the guess you make isn't actually part of the eligible set but it helps reduce the eligible set more than anything else!
+
+1. Start be guessing `Code(White, White, Black, Black)`
+2. Submit your guess
+3. Look at the feedback
+4. If it's 4 black pegs: well done you've won. Enjoy the money I hope it makes you very happy
+5. For each code that hasn't been used before (not just those in the eligible set) assign it a score based on the minimum number of possibilities it might eliminate
+    - For each unused code iterate through all 15 possible feedbacks to calculate the number of possibilities that code would eliminate in the eligible set for each possible feedback
+    - For each unused code take the minimum of the above as the score for that unused code
+6. You are now ready to choose your guess
+    - It's just one of the codes from step 5 with the maximum score
+    - If you can find a code with the maximum score that also appears in the eligible set then you should use that
+    - otherwise any guess with the maximum score will do
+    - Repeat steps 2 -> 6 until you win or get bored
+    
+With my implementation on my little macbook this algorithm took hours to run for all 1296 hidden codes. 
+At first I thought it might be that my implementation sucked!
+But if you think about how many operations have to happen for the worst case of this algorithm (which happens for over half the codes) then it's not so unreasonable that it takes so long.
+    
+#### Results
+```
+Results for knuth algorithm:
+Number of guesses needed on the left, 
+amount of hidden codes that needed that number of guesses on the left
+Map(
+  1 -> 1,
+  2 -> 6,
+  3 -> 64,
+  4 -> 545,
+  5 -> 680
+)
+
+Weighted Mean -> 5785 / 1296 = 4.46373...
+Worst Case    -> 5
+Median        -> 5
+Mode          -> 5
+```
