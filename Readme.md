@@ -15,7 +15,7 @@ In this version there are 4 holes and 6 colours and we don't allow blanks. So th
 Since in this version there are 4 holes there are also 4 feedback holes. 
 A feedback hole can either have a Black peg, a White peg, or be blank; there are 3 states each hole can have.
 So how many feedbacks are possible in total?
-Let's use the standard "stars and bars" [trick](https://en.wikipedia.org/wiki/Stars_and_bars_(combinatorics\)).
+Let's use the standard stars and bars [trick](https://en.wikipedia.org/wiki/Stars_and_bars_(combinatorics\)).
 - There are 3 states a hole can have so that corresponds to 3 "buckets" (Black, White, Blank)
 - Order the buckets like this: Black on the right, White in the middle, and Blank on the left
 - We use bars (`|`) to separate the buckets 
