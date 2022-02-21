@@ -57,7 +57,7 @@ With my implementation on my little macbook this algorithm took seconds to run f
 ```
 Results for brute-force algorithm:
 Number of guesses needed on the left, 
-amount of hidden codes that needed that number of guesses on the left
+amount of hidden codes that needed that number of guesses on the right
 
 Map(
   1 -> 1,
@@ -103,7 +103,7 @@ But if you think about how many operations have to happen for the worst case of 
 ```
 Results for knuth algorithm:
 Number of guesses needed on the left, 
-amount of hidden codes that needed that number of guesses on the left
+amount of hidden codes that needed that number of guesses on the right
 Map(
   1 -> 1,
   2 -> 6,
