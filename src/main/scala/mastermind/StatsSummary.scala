@@ -15,11 +15,11 @@ object StatsSummary {
     )
 
   def getWeightedMean(map: Map[Int, Int]): Double = {
-    println( map.iterator.map { case (a, b) => a * b }.sum,map.values.sum.toDouble)
+    println(map.iterator.map { case (a, b) => a * b }.sum, map.values.sum.toDouble)
     map.iterator.map { case (a, b) => a * b }.sum / map.values.sum.toDouble
   }
 
-  def getMode[A](map: Map[A, Int]): A             =
+  def getMode[A](map: Map[A, Int]): A =
     map.maxBy { case (_, occurrences) => occurrences }._1
 
   def getMedian[A: Ordering](map: Map[A, Int]): A = {

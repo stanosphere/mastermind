@@ -1,30 +1,30 @@
 package mastermind
 
 import better.files._
-import mastermind.model.{Code, CodeBreakResult, Feedback, FeedbackPeg}
-import cats.syntax.traverse._
-import cats.instances.list._
 import cats.instances.either._
-import mastermind.typeclasses.MapTypeclasses._
-import StatsSummary._
+import cats.instances.list._
 import cats.syntax.show._
+import cats.syntax.traverse._
+import mastermind.StatsSummary._
+import mastermind.model.{Code, CodeBreakResult, Feedback}
+import mastermind.typeclasses.MapTypeclasses._
 
 object InspectResults {
   val resultDir = "out/mastermind/"
 
   println(Feedback.allPossibleFeedbacks)
 
-  val q = Set(1,2,3)
+  val q = Set(1, 2, 3)
 
-  val p = (for {
-  a <- q
-  b <- q
-  c <- q
-  d <- q
-  e <- q
-  f <- q
-  g <- q
-  } yield List(a,b,c,d,e,f,g))
+  val p = for {
+    a <- q
+    b <- q
+    c <- q
+    d <- q
+    e <- q
+    f <- q
+    g <- q
+  } yield List(a, b, c, d, e, f, g)
 
   println(p.map(_.sorted).size)
 
@@ -33,11 +33,11 @@ object InspectResults {
     val knuthResults      = outputCsvToSummary(File(resultDir + "knuth.csv")).toOption.get
     val bruteForceResults = outputCsvToSummary(File(resultDir + "brute-force.csv")).toOption.get
 
-    printResults("knuth",knuthResults)
-    printResults("brute-force",bruteForceResults)
+    printResults("knuth", knuthResults)
+    printResults("brute-force", bruteForceResults)
   }
 
-  private def printResults(algorithmName:String,results: Map[Int,Int] ): Unit = {
+  private def printResults(algorithmName: String, results: Map[Int, Int]): Unit = {
     println(s"Results for $algorithmName algorithm:")
     println(results.show)
     println(StatsSummary(results).show)

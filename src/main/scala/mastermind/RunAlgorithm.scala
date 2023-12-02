@@ -1,8 +1,8 @@
 package mastermind
 
+import better.files._
 import mastermind.algorithms.{Algorithm, BruteForce, Knuth}
 import mastermind.model.{Code, CodeBreakResult}
-import better.files._
 
 object RunAlgorithm {
 

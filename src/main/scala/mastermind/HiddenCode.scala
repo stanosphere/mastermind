@@ -1,7 +1,7 @@
 package mastermind
 
+import mastermind.HiddenCode._
 import mastermind.model.{Code, Feedback, FeedbackPeg}
-import HiddenCode._
 
 trait HiddenCode {
   // protected so that the algorithms can't just read off the answer lol

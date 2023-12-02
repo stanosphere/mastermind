@@ -1,7 +1,7 @@
 package mastermind.model
 
-import mastermind.model.Peg._
 import cats.implicits._
+import mastermind.model.Peg._
 
 case class Code(a: Peg, b: Peg, c: Peg, d: Peg) {
   def toList: List[Peg] = List(a, b, c, d)

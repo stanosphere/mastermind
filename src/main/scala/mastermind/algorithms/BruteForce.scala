@@ -1,10 +1,10 @@
 package mastermind.algorithms
 
+import cats.data.State
+import cats.implicits._
 import mastermind.HiddenCode
 import mastermind.model.Peg._
 import mastermind.model.{Code, CodeBreakResult, Feedback}
-import cats.data.State
-import cats.implicits._
 
 case object BruteForce extends Algorithm {
 
